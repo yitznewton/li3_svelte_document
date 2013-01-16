@@ -2,9 +2,31 @@
 namespace li3_mongo_svelte\extensions\adapter\data\source\MongoDb;
 
 use lithium\core\Libraries;
+use lithium\data\Entity;
 
 class MongoSvelte extends \lithium\data\source\MongoDb
 {
+	public static function _applyModelToEmbedded(Entity $entity, array $relations)
+	{
+		foreach ($relations as $relation) {
+			$relation = $relation->data();
+			$relationKey = $relation['embedded'];
+			$relationModel = $relation['to'];
+
+			if (isset($entity->$relationKey)) {
+				$embeddedSet = $entity->$relationKey;
+
+				foreach ($embeddedSet as $key => $embeddedArray) {
+					$embeddedEntity = $relationModel::create($embeddedArray);
+					self::_applyModelToEmbedded($embeddedEntity, $relationModel::relations());
+					$entity->{$relationKey}[$key] = $embeddedEntity;
+				}
+			}
+		}
+
+		return $entity;
+	}
+
 	public function _init()
 	{
 		parent::_init();
@@ -24,16 +46,16 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 
 					foreach ($embeddedSet as $key => $embeddedArray) {
 						$embeddedEntity = $relationModel::create($embeddedArray);
+						var_dump($relationModel::relations());
 						$entity->{$relationKey}[$key] = $embeddedEntity;
 					}
 				}
 			}
-			var_dump($entity->facility_address_set);
 
 			return $entity;
 		};
 
-		$this->applyFilter('read', function($self, $params, $chain) use ($processRelations) {
+		$this->applyFilter('read', function($self, $params, $chain) {
 			$results = $chain->next($self, $params, $chain);
 			$model = is_object($params['query']) ? $params['query']->model() : null;
 			
@@ -42,11 +64,11 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 			}
 
 			$results->applyFilter('_populate', function($self, $params, $chain)
-				use ($model, $processRelations) {
+				use ($model) {
 				$item = $chain->next($self, $params, $chain);
 				
 				if ($item) {
-					$item = $processRelations($item, $model::relations());
+					$item = \li3_mongo_svelte\extensions\adapter\data\source\MongoDb\MongoSvelte::_applyModelToEmbedded($item, $model::relations());
 				}
 
 				return $item;
