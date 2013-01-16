@@ -21,6 +21,8 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 					self::_applyModelToEmbedded($embeddedEntity, $relationModel::relations());
 					$entity->{$relationKey}[$key] = $embeddedEntity;
 				}
+
+				unset($embeddedSet);
 			}
 		}
 
@@ -30,7 +32,7 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 	public function _init()
 	{
 		parent::_init();
-		$this->_classes['entity'] = 'li3_mongo_svelte\extensions\data\entity\SvelteDocument';
+		$this->_classes['entity'] = 'li3_mongo_svelte\extensions\data\entity\Document';
 		$this->_classes['schema'] = 'li3_mongo_svelte\extensions\data\SvelteDocumentSchema';
 		$this->_classes['set'] = 'li3_mongo_svelte\extensions\data\collection\DocumentSet';
 		$this->_classes['server'] = 'MongoClient';
