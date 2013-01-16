@@ -16,7 +16,7 @@ class Document extends \lithium\data\Entity
 		foreach ($data as &$item) {
 			if (is_array($item)) {
 				self::castArraysToObject($item);
-				//$item = new SvelteSet($item);
+				$item = new SvelteSet($item);
 			}
 		}
 	}

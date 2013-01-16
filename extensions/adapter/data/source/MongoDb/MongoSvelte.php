@@ -17,9 +17,9 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 				$embeddedSet = $entity->$relationKey;
 
 				foreach ($embeddedSet as $key => $embeddedArray) {
-					$embeddedEntity = $relationModel::create($embeddedArray);
+					$embeddedEntity = $relationModel::create($embeddedArray->toArray());
 					self::_applyModelToEmbedded($embeddedEntity, $relationModel::relations());
-					$entity->{$relationKey}[$key] = $embeddedEntity;
+					$entity->$relationKey->setItem($key, $embeddedEntity);
 				}
 
 				unset($embeddedSet);
@@ -36,27 +36,6 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 		$this->_classes['schema'] = 'li3_mongo_svelte\extensions\data\SvelteDocumentSchema';
 		$this->_classes['set'] = 'li3_mongo_svelte\extensions\data\collection\DocumentSet';
 		$this->_classes['server'] = 'MongoClient';
-
-		$processRelations = function($entity, array $relations) {
-			// FIXME this needs to be converted to a Collection?
-			foreach ($relations as $relation) {
-				$relation = $relation->data();
-				$relationKey = $relation['embedded'];
-				$relationModel = $relation['to'];
-
-				if (isset($entity->$relationKey)) {
-					$embeddedSet = $entity->$relationKey;
-
-					foreach ($embeddedSet as $key => $embeddedArray) {
-						$embeddedEntity = $relationModel::create($embeddedArray);
-						var_dump($relationModel::relations());
-						$entity->{$relationKey}[$key] = $embeddedEntity;
-					}
-				}
-			}
-
-			return $entity;
-		};
 
 		$this->applyFilter('read', function($self, $params, $chain) {
 			$results = $chain->next($self, $params, $chain);
