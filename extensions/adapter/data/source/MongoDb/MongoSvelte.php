@@ -33,6 +33,7 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 		$this->_classes['entity'] = 'li3_mongo_svelte\extensions\data\entity\SvelteDocument';
 		$this->_classes['schema'] = 'li3_mongo_svelte\extensions\data\SvelteDocumentSchema';
 		$this->_classes['set'] = 'li3_mongo_svelte\extensions\data\collection\DocumentSet';
+		$this->_classes['server'] = 'MongoClient';
 
 		$processRelations = function($entity, array $relations) {
 			// FIXME this needs to be converted to a Collection?
