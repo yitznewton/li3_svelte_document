@@ -21,6 +21,8 @@ class DocumentSet extends \lithium\data\collection\DocumentSet
 	 * Lazy-loads a document from a query using a reference to a database adapter and a query
 	 * result resource.
 	 *
+	 * Need to override this to make it filterable.
+	 *
 	 * @param array $data
 	 * @param mixed $key
 	 * @return array
