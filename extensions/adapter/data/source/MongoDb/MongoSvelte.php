@@ -67,9 +67,12 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 			$results->applyFilter('_populate', function($self, $params, $chain)
 				use ($model) {
 				$item = $chain->next($self, $params, $chain);
-				
-				if ($item) {
-					$item = \li3_mongo_svelte\extensions\adapter\data\source\MongoDb\MongoSvelte::_applyModelToEmbedded($item, $model::relations());
+				$relations = $model::relations();
+
+				if (!$item) return $item;
+
+				if ($relations) {
+					$item = \li3_mongo_svelte\extensions\adapter\data\source\MongoDb\MongoSvelte::_applyModelToEmbedded($item, $relations);
 				}
 
 				return $item;

@@ -1,25 +1,24 @@
 <?php
 namespace li3_mongo_svelte\extensions\data\entity;
 
+use li3_mongo_svelte\extensions\data\SvelteSet;
+
 class SvelteDocument extends \lithium\data\Entity
 {
-	public function set(array $data, array $options = array()) {
-		$defaults = array('init' => false);
-		$options += $defaults;
+	public function _init()
+	{
+		parent::_init();
+		self::castArraysToObject($this->_data);
+		$this->_data = new SvelteSet($this->_data);
+	}
 
-		foreach ($data as $key => $val) {
-			unset($this->_increment[$key]);
-			if (strpos($key, '.')) {
-				$this->_setNested($key, $val);
-				continue;
+	private static function castArraysToObject(array &$data)
+	{
+		foreach ($data as &$item) {
+			if (is_array($item)) {
+				self::castArraysToObject($item);
+				$item = new SvelteSet($item);
 			}
-			if ($cast) {
-//				$pathKey = $this->_pathKey;
-//				$model = $this->_model;
-//				$parent = $this;
-//				$val = $schema->cast($this, $key, $val, compact('pathKey', 'model', 'parent'));
-			}
-			$this->_updated[$key] = $val;
 		}
 	}
 }
