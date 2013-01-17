@@ -1,5 +1,5 @@
 <?php
-namespace li3_mongo_svelte\extensions\adapter\data\source\MongoDb;
+namespace li3_svelte_document\extensions\adapter\data\source\MongoDb;
 
 use lithium\core\Libraries;
 use lithium\data\Entity;
@@ -32,9 +32,9 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 	public function _init()
 	{
 		parent::_init();
-		$this->_classes['entity'] = 'li3_mongo_svelte\extensions\data\entity\Document';
-		$this->_classes['schema'] = 'li3_mongo_svelte\extensions\data\SvelteDocumentSchema';
-		$this->_classes['set'] = 'li3_mongo_svelte\extensions\data\collection\DocumentSet';
+		$this->_classes['entity'] = 'li3_svelte_document\extensions\data\entity\Document';
+		$this->_classes['schema'] = 'li3_svelte_document\extensions\data\SvelteDocumentSchema';
+		$this->_classes['set'] = 'li3_svelte_document\extensions\data\collection\DocumentSet';
 		$this->_classes['server'] = 'MongoClient';
 
 		$this->applyFilter('read', function($self, $params, $chain) {
@@ -53,7 +53,7 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 				if (!$item) return $item;
 
 				if ($relations) {
-					$item = \li3_mongo_svelte\extensions\adapter\data\source\MongoDb\MongoSvelte::_applyModelToEmbedded($item, $relations);
+					$item = \li3_svelte_document\extensions\adapter\data\source\MongoDb\MongoSvelte::_applyModelToEmbedded($item, $relations);
 				}
 
 				return $item;

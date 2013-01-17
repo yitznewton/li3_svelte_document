@@ -1,7 +1,7 @@
 <?php
-namespace li3_mongo_svelte\extensions\data\entity;
+namespace li3_svelte_document\extensions\data\entity;
 
-use li3_mongo_svelte\extensions\data\SvelteSet;
+use li3_svelte_document\extensions\data\SvelteSet;
 
 class Document extends \lithium\data\Entity
 {

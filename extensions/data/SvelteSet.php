@@ -1,5 +1,7 @@
 <?php
-namespace li3_mongo_svelte\extensions\data;
+namespace li3_svelte_document\extensions\data;
+
+use InvalidArgumentException;
 
 class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 {
@@ -84,6 +86,16 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 	public function toArray()
 	{
 		return $this->_data;
+	}
+
+	public function to($type)
+	{
+		if ($type == 'array')
+		{
+			return $this->toArray();
+		}
+
+		throw new InvalidArgumentException('Only supports "array"');
 	}
 }
 
