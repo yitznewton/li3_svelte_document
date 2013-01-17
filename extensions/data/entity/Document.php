@@ -19,6 +19,10 @@ class Document extends \lithium\data\Entity
 				$item = new SvelteSet($item);
 			}
 		}
+
+		// CAUTION: $item is set by reference above; unsetting so nobody will
+		// overwrite it
+		unset($item);
 	}
 }
 

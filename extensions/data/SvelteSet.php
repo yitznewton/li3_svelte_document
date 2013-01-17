@@ -28,6 +28,12 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 		$this->_data[$key] = $value;
 	}
 
+	/**
+	 * This is a method from \lithium\util\Collection that MDX used before
+	 * implementing the new Svelte classes, so we are bringing it in
+	 *
+	 * @return mixed
+	 */
 	public function first()
 	{
 		return $this->_data[0];

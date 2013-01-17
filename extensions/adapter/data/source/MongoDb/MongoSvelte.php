@@ -15,15 +15,15 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 			$relationModel = $relation['to'];
 
 			if (isset($entity->$relationKey)) {
-				$embeddedSet = $entity->$relationKey;
+				$embeddedRaw = $entity->$relationKey;
 
-				foreach ($embeddedSet as $key => $embeddedArray) {
-					$embeddedEntity = $relationModel::create($embeddedArray->toArray());
-					self::_applyModelToEmbedded($embeddedEntity, $relationModel::relations());
+				foreach ($embeddedRaw as $key => $embeddedData) {
+					$embeddedEntity = $relationModel::create(
+						$embeddedData->toArray());
+					self::_applyModelToEmbedded(
+						$embeddedEntity, $relationModel::relations());
 					$entity->$relationKey->setItem($key, $embeddedEntity);
 				}
-
-				unset($embeddedSet);
 			}
 		}
 
@@ -40,7 +40,13 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 
 		$this->applyFilter('read', function($self, $params, $chain) {
 			$results = $chain->next($self, $params, $chain);
-			$model = is_object($params['query']) ? $params['query']->model() : null;
+
+			if (is_object($params['query'])) {
+				$model = $params['query']->model();
+			}
+			else {
+				$model = null;
+			}
 			
 			if (!$model || count($model::relations()) == 0) {
 				return $results;
@@ -54,7 +60,9 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 				if (!$item) return $item;
 
 				if ($relations) {
-					$item = \li3_svelte_document\extensions\adapter\data\source\MongoDb\MongoSvelte::_applyModelToEmbedded($item, $relations);
+					$item = \li3_svelte_document\extensions\adapter\data\
+						source\MongoDb\MongoSvelte::_applyModelToEmbedded(
+							$item, $relations);
 				}
 
 				return $item;
@@ -65,12 +73,13 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 	}
 
 	/**
-	 * Extended for full namesapce support
+	 * Use fully-qualified namespace
 	 */
 	public function relationship($class, $type, $name, array $config = array()) {
-		if(isset($config['to'])){
+		if (isset($config['to'])) {
 			$config['to'] = Libraries::locate('models', $config['to']);
 		}
+
 		return parent::relationship($class, $type, $name, $config);
 	}
 
