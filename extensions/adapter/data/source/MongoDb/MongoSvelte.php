@@ -3,6 +3,7 @@ namespace li3_svelte_document\extensions\adapter\data\source\MongoDb;
 
 use lithium\core\Libraries;
 use lithium\data\Entity;
+use BadMethodCallException;
 
 class MongoSvelte extends \lithium\data\source\MongoDb
 {
@@ -73,5 +74,19 @@ class MongoSvelte extends \lithium\data\source\MongoDb
 		return parent::relationship($class, $type, $name, $config);
 	}
 
+	public function create($query, array $options = array())
+	{
+		throw new BadMethodCallException('li3_svelte_document is read-only');
+	}
+
+	public function update($query, array $options = array())
+	{
+		throw new BadMethodCallException('li3_svelte_document is read-only');
+	}
+
+	public function delete($query, array $options = array())
+	{
+		throw new BadMethodCallException('li3_svelte_document is read-only');
+	}
 }
 
