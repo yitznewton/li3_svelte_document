@@ -60,11 +60,13 @@ class Team extends  \lithium\data\Model.php {
 Key specified is the name used to reference the relation on a find query.
 
 Options are:  
-to - specified target model  
-embedded  - the key on which the data is embedded  
+
+* to - specified target model  
+* embedded  - the key on which the data is embedded  
 
 
 ## Some Notes
+
 * Beta Beta Beta - Currently, this plugin is being used heavily in a read
   MongoDB environment, but that's it. The SvelteSet substitute for
   DocumentSet in nested subdocuments also does not support all the
