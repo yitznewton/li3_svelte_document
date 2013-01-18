@@ -19,7 +19,8 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 		return isset($this->_data[$name]) ? $this->_data[$name] : null;
 	}
 
-	public function __isset($name) {
+	public function __isset($name)
+	{
 		return isset($this->_data[$name]) ? $this->_data[$name] : null;
 	}
 
