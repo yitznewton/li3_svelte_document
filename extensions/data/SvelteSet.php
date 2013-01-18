@@ -2,6 +2,7 @@
 namespace li3_svelte_document\extensions\data;
 
 use InvalidArgumentException;
+use li3_svelte_document\extensions\data\entity\Document;
 
 class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 {
@@ -18,8 +19,16 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 		return isset($this->_data[$name]) ? $this->_data[$name] : null;
 	}
 
+	public function __isset($name) {
+		return isset($this->_data[$name]) ? $this->_data[$name] : null;
+	}
+
 	public function __set($name, $value)
 	{
+		if (is_array($value)) {
+			$wrap = array(&$value);
+			Document::castArraysToObject($wrap);
+		}
 		$this->_data[$name] = $value;
 	}
 

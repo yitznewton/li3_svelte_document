@@ -5,6 +5,15 @@ use li3_svelte_document\extensions\data\SvelteSet;
 
 class Document extends \lithium\data\Entity
 {
+	public function __set($name, $value = null)
+	{
+		parent::__set($name, $value);
+		if (is_array($value)) {
+			$wrap = array(&$this->_updated[$name]);
+			self::castArraysToObject($wrap);
+		}
+	}
+
 	public function _init()
 	{
 		parent::_init();
