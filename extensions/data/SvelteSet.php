@@ -99,7 +99,9 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 		unset($this->_data[$offset]);
 
 		if (is_numeric($offset)) {
-			// assume this is a numeric array and reset the array keys
+			// assume this is a numeric array and reset the array keys;
+			// otherwise iteration will be messed up because of the gaps
+			// left in the sequence of keys
 			$this->_data = array_values($this->_data);
 		}
 	}
