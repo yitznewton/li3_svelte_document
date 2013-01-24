@@ -121,6 +121,7 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 			// otherwise iteration will be messed up because of the gaps
 			// left in the sequence of keys
 			$this->_data = array_values($this->_data);
+			if ($this->position > $offset) --$this->position;
 		}
 	}
 
