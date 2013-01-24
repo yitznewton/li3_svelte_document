@@ -46,7 +46,7 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 	 */
 	public function first()
 	{
-		return $this->_data[0];
+		return isset($this->_data[0]) ? $this->_data[0] : null;
 	}
 
 	public function current()
@@ -81,21 +81,39 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 
 	public function offsetExists($offset)
 	{
+		if (!is_scalar($offset)) {
+			throw new InvalidArgumentException('offset must be scalar');
+		}
+
 		return array_key_exists($offset, $this->_data);
 	}
 
 	public function offsetGet($offset)
 	{
+		if (!is_scalar($offset)) {
+			throw new InvalidArgumentException('offset must be scalar');
+		}
+
 		return $this->_data[$offset];
 	}
 
 	public function offsetSet($offset, $value)
 	{
+		if (!is_scalar($offset)) {
+			throw new InvalidArgumentException('offset must be scalar');
+		}
+
 		$this->_data[$offset] = $value;
 	}
 
 	public function offsetUnset($offset)
 	{
+		if (!is_scalar($offset)) {
+			throw new InvalidArgumentException('offset must be scalar');
+		}
+
+		if (!array_key_exists($offset, $this->_data)) return;
+
 		unset($this->_data[$offset]);
 
 		if (is_numeric($offset)) {
