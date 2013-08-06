@@ -125,6 +125,11 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 		}
 	}
 
+	public function stats()
+	{
+		return isset($this->_data['stats']) ? $this->_data['stats'] : array();
+	}
+
 	public function toArray()
 	{
 		return $this->_data;
