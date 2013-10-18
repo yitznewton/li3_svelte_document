@@ -135,6 +135,21 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 		return $this->_data;
 	}
 
+	/**
+	 * @see lithium\utils\Collection::map()
+	 */
+	public function map($filter, array $options = array()) {
+		$defaults = array('collect' => true);
+		$options += $defaults;
+		$data = array_map($filter, $this->_data);
+
+		if ($options['collect']) {
+			$class = get_class($this);
+			return new $class($data);
+		}
+		return $data;
+	}
+
 	public function to($type)
 	{
 		if ($type == 'array')
