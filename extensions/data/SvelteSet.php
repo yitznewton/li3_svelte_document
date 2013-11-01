@@ -150,6 +150,20 @@ class SvelteSet implements \Iterator, \ArrayAccess, \Countable
 		return $data;
 	}
 
+	public function sort($callback = null)
+	{
+		$data = $this->_data;
+
+		if ($callback) {
+			usort($data, $callback);
+		}
+		else {
+			sort($data);
+		}
+
+		return new SvelteSet($data);
+	}
+
 	public function to($type)
 	{
 		if ($type == 'array')
